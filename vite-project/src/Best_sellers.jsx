@@ -53,7 +53,10 @@ function SampleNextArrow(props) {
 }
 
 export default function Categories() {
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [hoverPic, setHoverPic] = useState(null);
+  const [bestSellerImages, setBestSellerImages] = useState([])
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -61,44 +64,14 @@ export default function Categories() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const images = [
-    {
-      key: "image_1",
-      name: "Navy Blue Self Twill Formal..",
-      image:
-        "//diners.com.pk/cdn/shop/files/AD38388-N-BLUE-02_360x.webp?v=1776165338",
-    },
-    {
-      key: "image_2",
-      name: "White Sele Textured Formal..",
-      image:
-        "//diners.com.pk/cdn/shop/files/AD38397-White-02_360x.webp?v=1752476113",
-    },
-    {
-      key: "image_3",
-      name: "Black Dobby Formal shirt",
-      image:
-        "//diners.com.pk/cdn/shop/files/AD38390-Black-02_360x.webp?v=1751614185",
-    },
-    {
-      key: "image_4",
-      name: "White Hairline Strips",
-      image:
-        "//diners.com.pk/cdn/shop/files/AD38392-White-02_360x.webp?v=1751630780",
-    },
-    {
-      key: "image_5",
-      name: "Light Brown Regular Fit..",
-      image:
-        "//diners.com.pk/cdn/shop/files/BA3143-L-Brown-01_360x.webp?v=1758888048",
-    },
-    {
-      key: "image_6",
-      name: "Royal Blue Smart Fit Cotton..",
-      image:
-        "//diners.com.pk/cdn/shop/files/BD2944-R-BLUE-02_627619ca-71c6-4755-a981-bea317aa3dff_360x.webp?v=1767354298",
-    },
-  ];
+  
+  useEffect(() => {
+    fetch("http://localhost:8000/api/BestSellers")
+    .then((res) => res.json())
+    .then((data) => {
+      setBestSellerImages(data.bestSellerArray)
+    })
+  }, [])
 
   const settings = {
     dots: false,
@@ -139,31 +112,36 @@ export default function Categories() {
 
       <div className="w-full px-4 md:px-8">
         <Slider key={windowWidth} {...settings}>
-          {images.map((img) => (
+          {bestSellerImages.map((img) => (
             <div className="px-1" key={img.key}>
               <div className="w-full flex flex-col gap-3 justify-center items-center">
-                <div className="w-full h-[500px] zoom-image overflow-hidden rounded-md md:h-[500px] lg:h-[500px] xl:h-[500px] 2xl:h-[520px]">
+                <div
+                  className="w-full h-[500px] relative zoom-image overflow-hidden rounded-md md:h-[500px] lg:h-[500px] xl:h-[500px] 2xl:h-[520px]"
+                  onMouseEnter={() => setHoverPic(img.key)}
+                  onMouseLeave={() => setHoverPic(null)}
+                >
                   <style>
                     {`
-                    .zoom-image:{
+                    .zoom-image{
                       transition: transform 10s ease-in-out
                     }
                     .zoom-image:hover{
                       transform: scale(1.25)
-                      
+                
                     }  
                     `}
                   </style>
                   <img
-                    src={img.image}
-                    alt={img.name}
+                    src={img.pair}
+                    alt={img.key}
                     className="w-full h-full object-cover object-center zoom-image"
                   />
 
-                  {/* 2. Shirt_size Component - Jo by default chupaya hoga aur hover par show hoga */}
-                  <div className="absolute inset-x-0 bottom-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm">
-                    <Shirt_size />
-                  </div>
+                  {hoverPic === img.key && (
+                    <div className="absolute inset-0 z-10 top-30 flex items-center justify-center bg-black/10 backdrop-blur">
+                      <Shirt_size />
+                    </div>
+                  )}
                 </div>
                 <span className="text-[13px] font-medium text-center md:text-[18px] 2xl:text-[20px]">
                   {img.name}

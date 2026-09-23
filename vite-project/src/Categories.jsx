@@ -4,8 +4,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Categories() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [categoriesImages, setCategoriesImages] = useState([])
+  
   // Screen size track karne ke liye
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -13,41 +15,16 @@ export default function Categories() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const images = [
-    {
-      key: "image_1",
-      name: "MEN POLO...",
-      image: "https://diners.com.pk/cdn/shop/files/Polo_jpg_360x.jpg?v=1770638017",
-    
-      
-    },
-    {
-      key: "image_2",
-      name: "MEN WESTERN",
-      image: "https://diners.com.pk/cdn/shop/files/Shirt_jpg_360x.jpg?v=1770638017",
-    },
-    {
-      key: "image_3",
-      name: "WOMEN",
-      image: "https://diners.com.pk/cdn/shop/files/360x360_jpg_360x.jpg?v=1770635931",
-    },
-    {
-      key: "image_4",
-      name: "KIDS",
-      image: "https://diners.com.pk/cdn/shop/files/Kids-category-tile_jpg_360x.jpg?v=1783421330",
-    },
-    {
-      key: "image_5",
-      name: "FRAGRANCES",
-      image: "https://diners.com.pk/cdn/shop/files/Fragrance_73310ada-db56-4f4f-b70a-44a356d38c41_360x.jpg?v=1764656497",
-    },
-    {
-      key: "image_6",
-      name: "FOOT WEAR",
-      image: "https://diners.com.pk/cdn/shop/files/Footwear_8f02389c-3a5d-4009-b06a-7fe1368017cd_360x.jpg?v=1764656497",
-    },
-  ];
-
+  useEffect(() => {
+    fetch("http://localhost:8000/api/Categories")
+    .then((res) => res.json())
+    .then((data) => {
+      console.log('data:a', data)
+      setCategoriesImages(data.categories || [])
+    }
+    )
+  }, [])
+ 
   // Screen width ke mutabiq slidesToShow direct control kar rahe hain
   const settings = {
     dots: false,
@@ -61,6 +38,7 @@ export default function Categories() {
 
   const Slider = SlickSlider.default || SlickSlider;
 
+  console.log('categoriesImages: ', categoriesImages)
   return (
     <div className='w-full h-full font-["Montserrat"]'>
       <div className="w-full h-[150px] flex flex-col justify-center items-center">
@@ -79,13 +57,13 @@ export default function Categories() {
       <div className="w-full px-1 ">
         {/* key={windowWidth} ki wajah se jab bhi screen resize hogi, slider naye सिरे se load hoga */}
         <Slider key={windowWidth} {...settings}>
-          {images.map((img) => (
+          {categoriesImages.map((img) => (
             <div className="px-1" key={img.key}>
               <div className="w-full flex flex-col gap-3 justify-center items-center">
                 <div className="w-full h-[200px] overflow-hidden rounded-md md:h-[350px] lg:h-[280px] xl:h-[320px] 2xl:h-[520px] ">
                   <img 
-                    src={img.image} 
-                    alt={img.name} 
+                    src={img.pair} 
+                    alt={img.key} 
                     className="w-full h-full object-cover object-center"
                   />
                 </div>

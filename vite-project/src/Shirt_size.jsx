@@ -17,10 +17,10 @@ export default function Shirt_size() {
   ];
 
   return (
-    <div className='bg-gray-300 w-[300px] h-[270px] flex justify-center items-center font-["Montserrat"]'>
+    
       
       
-      <div className="bg-white w-[80%] h-[80%] flex flex-col items-center gap-5 rounded-md">
+      <div className="bg-white w-[80%] h-[35%] flex flex-col items-center gap-5 rounded-md">
       <span>Size : {size}</span>
         <div className=" grid grid-cols-5 gap-3 justify-items-center">
         
@@ -43,6 +43,6 @@ export default function Shirt_size() {
         </div>  
         <div className="w-full h-[40px] rounded-md text-white bg-black flex justify-center items-center"><span>ADD to CART</span></div>
       </div>
-    </div>
+    
   );
 }
