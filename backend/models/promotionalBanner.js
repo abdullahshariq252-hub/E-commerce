@@ -1,4 +1,3 @@
-const express = require('express')
 const mongoose = require('mongoose')
 
 const bannerSchema = new mongoose.Schema({
@@ -14,7 +13,7 @@ const bannerSchema = new mongoose.Schema({
     device:{
         type:String,
         enum:['mobile','desktop'],
-        reuired:true,
+        required:true,
     }
 })
 

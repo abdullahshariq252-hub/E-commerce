@@ -1,21 +1,23 @@
-const express = require("express");
 const User = require("../models/userModel");
 const BannerSchema = require("../models/promotionalBanner");
 const categories = require("../models/categories");
 const CollectionModel = require("../models/collections");
 const bestSellerModel = require("../models/bestSellers");
-const productModel = require("../models/menPolo")
 
 // For creating a new user
 async function handleSignup(req, res) {
-  const { email, password, phone } = req.body;
-  const result = await User.create({
-    email,
-    password,
-    phone,
-  });
+  try {
+    const { email, password, phone } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Email and password are required" });
+    }
 
-  return res.status(201).json({ msg: "User created", result });
+    const result = await User.create({ email, password, phone });
+    return res.status(201).json({ msg: "User created", result });
+  } catch (error) {
+    const status = error.code === 11000 ? 409 : error.name === "ValidationError" ? 400 : 500;
+    return res.status(status).json({ msg: "User could not be created", error: error.message });
+  }
 }
 
 // For check Login user from database
@@ -23,15 +25,12 @@ async function handleUserLogin(req, res) {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.json("Email and password are required");
+      return res.status(400).json({ msg: "Email and password are required" });
     }
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ msg: "User not found!" });
-    if (user.email !== email) {
-      return res.status(200).json({ msg: "Email not verified" });
-    }
     if (user.password !== password) {
-      return res.status(200).json({ msg: "Password not verified" });
+      return res.status(401).json({ msg: "Invalid email or password" });
     }
     return res.status(200).json({ msg: "Login Successful", user });
   } catch (error) {
@@ -57,7 +56,7 @@ async function handleCtaegories(req, res) {
     res.status(200).json({ categories: categoriesImages });
   } catch (error) {
     console.error("Error in fetching categories:", error);
-    res.status(500).json({ error: "Failed to fetch categries" });
+    res.status(500).json({ error: "Failed to fetch categories" });
   }
 }
 
@@ -80,8 +79,8 @@ async function handleCollections(req, res) {
         collectionKidImage,
       });
   } catch (error) {
-    res.status(500);
-    console.error("Error in fetchinf collection: ", error);
+    console.error("Error in fetching collection:", error);
+    res.status(500).json({ error: "Failed to fetch collections" });
   }
 }
 
@@ -91,19 +90,9 @@ async function handleBestSeller(req, res) {
     const bestSellerArray = await bestSellerModel.find({});
     res.status(200).json({bestSellerArray})
   } catch (error) {
-    res.status(500);
-    console.error("Error in fetching Best Sellers", error);
+    console.error("Error in fetching Best Sellers:", error);
+    res.status(500).json({ error: "Failed to fetch best sellers" });
   }
-}
-
-// For Men Polo Products if it is applicable on all that i do
-async function handleProductModel(req, res) {
-  try {
-    
-  } catch (error) {
-    console.error("Error in fetching polo collection:",error)
-    res.status(500)
-  }  
 }
 
 module.exports = {
@@ -113,5 +102,4 @@ module.exports = {
   handleCtaegories,
   handleCollections,
   handleBestSeller,
-  handleProductModel,
 };

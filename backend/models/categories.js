@@ -1,4 +1,3 @@
-const express = require('express')
 const mongoose = require('mongoose')
 
 const categoriesSchema = mongoose.Schema({
@@ -13,7 +12,7 @@ const categoriesSchema = mongoose.Schema({
     },
     name:{
         type:String,
-        reuired:true
+        required:true
     },
 
     

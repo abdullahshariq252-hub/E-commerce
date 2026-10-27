@@ -1,4 +1,3 @@
-const express = require('express')
 const mongoose = require('mongoose')
 
 const bestSellerSchema = mongoose.Schema({
@@ -13,7 +12,7 @@ const bestSellerSchema = mongoose.Schema({
     },
     pair:{
         type:String,
-        reuired:true,
+        required:true,
     }
 
 })
