@@ -1,6 +1,4 @@
-import React from 'react'
 import {Lock} from 'lucide-react'
-import Login from './Login'
 import { Link } from "react-router-dom"
 
 export default function F_password() {

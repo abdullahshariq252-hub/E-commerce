@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import SlickSlider from "react-slick";
+import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Categories() {
-
+  const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [categoriesImages, setCategoriesImages] = useState([])
-  
-  // Screen size track karne ke liye
+  const [categoriesImages, setCategoriesImages] = useState([]);
+
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -17,28 +17,41 @@ export default function Categories() {
 
   useEffect(() => {
     fetch("http://localhost:8000/api/Categories")
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('data:a', data)
-      setCategoriesImages(data.categories || [])
-    }
-    )
-  }, [])
- 
-  // Screen width ke mutabiq slidesToShow direct control kar rahe hain
+      .then((res) => res.json())
+      .then((data) => setCategoriesImages(data.categories || []));
+  }, []);
+
   const settings = {
     dots: false,
     infinite: true,
     speed: 300,
-    slidesToShow: windowWidth < 1024 ? 2 : 4, // Mobile par 2, Desktop par 4
+    slidesToShow: windowWidth < 1024 ? 2 : 4,
     slidesToScroll: 1,
     arrows: false,
-    autoplay:true
+    autoplay: true
   };
 
   const Slider = SlickSlider.default || SlickSlider;
 
-  console.log('categoriesImages: ', categoriesImages)
+  const handleCategoryClick = (categoryName) => {
+    if (categoryName === "MEN POLO...") {
+      navigate("/Menpolo");
+    }
+    else 
+    if (categoryName === "MEN WESTERN...") {
+      navigate("/Menwestern");
+    }
+    else
+    if (categoryName === "WOMEN") {
+      navigate("/Women");
+    }
+    else
+    if (categoryName === "KIDS") {
+      navigate("/Kids");
+    }
+
+  };
+
   return (
     <div className='w-full h-full font-["Montserrat"]'>
       <div className="w-full h-[150px] flex flex-col justify-center items-center">
@@ -55,12 +68,11 @@ export default function Categories() {
       </div>
 
       <div className="w-full px-1 ">
-        {/* key={windowWidth} ki wajah se jab bhi screen resize hogi, slider naye सिरे se load hoga */}
         <Slider key={windowWidth} {...settings}>
           {categoriesImages.map((img) => (
             <div className="px-1" key={img.key}>
-              <div className="w-full flex flex-col gap-3 justify-center items-center">
-                <div className="w-full h-[200px] overflow-hidden rounded-md md:h-[350px] lg:h-[280px] xl:h-[320px] 2xl:h-[520px] ">
+              <div className="w-full flex flex-col gap-3 justify-center items-center cursor-pointer" onClick={() => handleCategoryClick(img.name)}>
+                <div className="w-full h-[200px] overflow-hidden rounded-md md:h-[350px] lg:h-[280px] xl:h-[320px] 2xl:h-[520px]" >
                   <img 
                     src={img.pair} 
                     alt={img.key} 

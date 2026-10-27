@@ -1,7 +1,3 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import SlickSlider from "react-slick";
-
 export default function Accessories() {
   return (
     <div className='w-full h-full font-["Montserrat"]'>

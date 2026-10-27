@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {Mail, Lock, Phone} from 'lucide-react'
-import Login from './Login'
 
 import {Link} from 'react-router-dom'
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import SlickSlider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Shirt_size from "./Shirt_size";
+
 
 // Custom Left Arrow (Screenshot jesa white rectangular box aur black arrow)
 // Custom Left Arrow
@@ -55,7 +55,6 @@ function SampleNextArrow(props) {
 export default function Categories() {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [hoverPic, setHoverPic] = useState(null);
   const [bestSellerImages, setBestSellerImages] = useState([])
 
   useEffect(() => {
@@ -117,8 +116,6 @@ export default function Categories() {
               <div className="w-full flex flex-col gap-3 justify-center items-center">
                 <div
                   className="w-full h-[500px] relative zoom-image overflow-hidden rounded-md md:h-[500px] lg:h-[500px] xl:h-[500px] 2xl:h-[520px]"
-                  onMouseEnter={() => setHoverPic(img.key)}
-                  onMouseLeave={() => setHoverPic(null)}
                 >
                   <style>
                     {`
@@ -137,11 +134,6 @@ export default function Categories() {
                     className="w-full h-full object-cover object-center zoom-image"
                   />
 
-                  {hoverPic === img.key && (
-                    <div className="absolute inset-0 z-10 top-30 flex items-center justify-center bg-black/10 backdrop-blur">
-                      <Shirt_size />
-                    </div>
-                  )}
                 </div>
                 <span className="text-[13px] font-medium text-center md:text-[18px] 2xl:text-[20px]">
                   {img.name}

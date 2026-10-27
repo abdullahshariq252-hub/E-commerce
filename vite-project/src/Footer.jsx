@@ -1,5 +1,3 @@
-import { Droplet } from "lucide-react";
-import React from "react";
 import { useState } from "react";
 
 export default function Footer() {
